@@ -22,18 +22,10 @@ jobs:
           java-version: 17
       - name: Build LimboAuth
         run: ./gradlew build
-      - name: Find git version
-        id: git-version
-        run: echo "id=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-      - name: Find correct JAR
-        id: find-jar
-        run: |
-          output="$(find build/libs/ ! -name "*-javadoc.jar" ! -name "*-sources.jar" -type f -printf "%f\n")"
-          echo "::set-output name=jarname::$output"
       - name: Release the build
         uses: ncipollo/release-action@v1
         with:
-          artifacts: build/libs/${{ steps.find-jar.outputs.jarname }}
+          artifacts: build/libs/*.jar
           body: ${{ join(github.event.commits.*.message, '\n') }}
           prerelease: true
           name: Dev-build ${{ steps.git-version.outputs.id }}
