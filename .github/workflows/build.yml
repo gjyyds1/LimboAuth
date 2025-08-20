@@ -31,7 +31,6 @@ jobs:
           output="$(find build/libs/ ! -name "*-javadoc.jar" ! -name "*-sources.jar" -type f -printf "%f\n")"
           echo "::set-output name=jarname::$output"
       - name: Release the build
-        if: ${{ github.event_name == 'push' }}
         uses: ncipollo/release-action@v1
         with:
           artifacts: build/libs/${{ steps.find-jar.outputs.jarname }}
